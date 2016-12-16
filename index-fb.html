@@ -1,0 +1,117 @@
+<html>
+<head>
+<title>Bootstrap  and  javascript Example</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/3.6.1/firebase.js"></script>
+<script src="./todos-fb.js"></script> 
+<style>
+body{
+background-color:#779985}
+
+.panel{
+border:1px solid #A52A2A;
+}
+.panel-heading{
+  color:#fff !important;
+  background-color:#891e41 !important;
+   font-size:32px;
+   text-align:center;
+  border-bottom:1px solid transparent;} 
+
+ 
+  </style>
+ </head>
+ <body onload="focus();">
+ 
+ 
+ 
+<div class="container">
+ <div class="panel panel-default">
+	<div class="panel-heading">
+	<h2  class="panel-title"> TODOS </h2>
+	</div>
+	
+	    <form class="form-horizontal" alt=""  name="register" >
+		
+		    <div class="panel-body">
+			    <div class="row">
+			        <div class="form-group">
+					  <label for="uname" class="control-label col-md-2"> NAME</label>
+					    <div class="col-md-4">
+						<input class="form-control" name="uname"  type="text" placeholder="ENTER YOUR NAME" SIZE="20"> 
+						</div>
+				    </div>
+			    </div>
+			    <div class="row">
+			        <div class="form-group">
+					  <label for="desc" class="control-label col-md-2"> DESCRIPTION</label>
+					    <div class="col-md-4">
+						<textarea  name="desc" placeholder="ENTER YOUR COMMENTS" rows="4" cols="50"> </textarea>
+						</div>
+				    </div>
+			    </div>
+				<div class="row">
+			        <div class="form-group">
+					  <label for="date" class="control-label col-md-2"> DATE</label>
+					    <div class="col-md-4">
+						<input class="form-control" type= "date" name="date">
+						</div>
+				    </div>
+			    </div> 
+				<div class="row">
+			        <div class="form-group">
+					  <label for="pri" class="control-label col-md-2"> PRIORITY</label>
+					    <div class="col-md-4">
+						    <select class="form-control" name="pri">
+							 <option value="low"> LOW</option>
+							 <option value="medium"> MEDIUM</option>
+							 <option value="high"> HIGH</option>
+							</select>
+						</div>
+				    </div>
+			    </div> 
+				<div class="row">
+			        <div class="form-group">
+					  <label for="st" class="control-label col-md-2"> STATUS</label>
+					    <div class="col-md-4">
+						    <select class="form-control" name="st">
+												
+							<option value="pending"> PENDING</option>
+							 <option value="completed"> COMPLETED</option>
+							</select>
+						</div>
+				    </div>
+			    </div> 
+				<div class="row">
+			        <div class="form-group">
+					     <input type="hidden" name="currentkey" value=-1>
+					    <div class="col-md-4">
+                         <button id="button1" style="float:right" onclick="return addtodo();" >SAVE</button>
+						</div>
+						 <div class="col-md-1">
+                         <button id="button2" style="float:left"  onclick="return update();">UPDATE</button>
+						</div>
+				    </div>
+			    </div>  
+			    <hr/>
+			</div>
+        </form>
+		
+	</div>
+    
+    <div id="todos"></div>
+	</div>
+	
+        	
+	  
+            
+ 
+     
+     
+ </body>
+
+</html>
