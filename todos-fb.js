@@ -54,31 +54,83 @@ function update()
     
     return false;
 }  
-function search()
-{
-alert("search work"); 
-    
-	var mysearch=mytodosRef.child[key];
-	mysearch.on("value",function(snapshot)	
-		{
-			for(var key in data)
-	{
-		var myName=snapshot.child("name");
-		//console.log(data[key].name);
-		
-		if ( myName === mysearch)
-		{
-			alert("ok");
-		    var myName=data[key];
-			console.log(myName);
-			
-		}
-		
-		else {
-			console.log(data[key].name);
-		}
-	});
+
+
+function getCriteria(){
+    var search;
+    if (document.register.name.value != null)
+        
+    {
+            search.key="name";
+            search.value= document.register.name.value ;
+        
+            return search ;
+        
     }
+
+    
+    
+    if (document.register.date.value != null)
+        
+        
+        {
+            searchkey=date;
+            searchvalue= document.register.date.value ;
+            
+            
+        }
+
+    
+    
+    
+    
+}
+function searchLocal()  
+{
+
+   var search = getCriteria();
+
+    
+  
+    for(var key in data)
+	{
+        var todo =data[key];
+              
+         switch (search.key)
+        {
+                
+        case "name":
+           
+                if ( search.value.trim() == data[key].name.trim())
+            {
+                alert("ok");
+                var searchResult=data[key]; 
+                console.log(searchResult);	
+                searchflag =true;
+            }
+		
+        break;
+                
+    case "date":
+        if (todo.date == searchdate )
+        {
+            
+            
+        }
+		
+		
+        break;
+                
+    default:
+        default code block   
+                
+                
+        }
+    
+    
+		
+	}
+    
     return false;
 }  
 function Deletetodo(key)
