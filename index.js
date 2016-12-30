@@ -16,7 +16,10 @@ lplayerRef.on("value", function(data) {
    console.log(data.val());
 
 });
-
+playersRef.orderByChild("age").on("child_added", function(data)
+{
+	console.log(data.val().age);
+});
 
 
 /*
@@ -62,10 +65,7 @@ playersRef.push({
 playersRef.orderByKey().on("child_added", function(data) {
    console.log(data.key);
 });
-playersRef.orderByChild("number").on("child_added", function(data)
-{
-	console.log(data.val().number);
-});
+
 playersRef.on("value", function(data) {
    console.log(data.val());
 }, function (error) {
