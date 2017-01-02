@@ -1,10 +1,14 @@
-var config={databaseURL:"https://todostable-70fca.firebaseio.com"};
+//var config = {databaseURL: "https://todostable-70fca.firebaseio.com"};
+var config = {databaseURL : "https://todos-9e7ee.firebaseio.com"};
 firebase.initializeApp(config);
 var mytodos=[];
 var data={};
-var mytodosRef = firebase.database().ref("mytodos");
+//var mytodosRef = firebase.database().ref("mytodos");
+var mytodosRef = firebase.database().ref("todos");
  
 //searchLocal();
+
+//searchFB();
 
 function addtodo()
 {
@@ -24,6 +28,7 @@ function addtodo()
 	{
 		console.log(snap.val());
 	});
+
 //to get paritcular object from name by using start at and end at way	
 	mytodosRef.orderByChild("prior").startAt('low').endAt('low').on("child_added", function(snap) 
 	{
@@ -51,12 +56,6 @@ function addtodo()
 		console.log("child_removed",snap.val());
 		
 	});
-
-
-
-
-
-
 
 
     mytodosRef.on("value", function(snapshot) 
@@ -149,7 +148,7 @@ function searchLocal()
  
    
    var search= getCriteria();
-  alert("gotocriteris");
+    alert("gotocriteris");
     searchflag =false;
    
 
@@ -269,5 +268,36 @@ function show(data) {
 		
 	
 } 
+
+
+function searchFB()
+{
+    
+    namevalue = document.register.uname.value ;
+    const db = firebase.database();   
+ //   const todos = db.child('todos');
+    const query = mytodosRef 
+                    .orderByChild('name')
+                    .equalTo(namevalue)
+                    .limitToFirst(1);
+    
+    query.on('value', snap=>{
+
+        console.log('values');
+        alert('here');
+        console.log(snap.val());
+        mynewobj = snap.val();
+        
+        show(mynewobj);
+        document.register.uname.value=mynewobj.name;
+	    document.register.desc.value=mynewobj.desc;
+	
+        
+    });
+    
+    return false ;
+    
+}
+
 
 	
