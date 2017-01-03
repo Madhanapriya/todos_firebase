@@ -1,10 +1,10 @@
-//var config = {databaseURL: "https://todostable-70fca.firebaseio.com"};
-var config = {databaseURL : "https://todos-9e7ee.firebaseio.com"};
+var config = {databaseURL: "https://todostable-70fca.firebaseio.com"};
+
 firebase.initializeApp(config);
 var mytodos=[];
 var data={};
-//var mytodosRef = firebase.database().ref("mytodos");
-var mytodosRef = firebase.database().ref("todos");
+var mytodosRef = firebase.database().ref("mytodos");
+
  
 //searchLocal();
 
@@ -23,40 +23,6 @@ function addtodo()
 		 return false;
 	 
 }	 
-// to  get particular object by using this code for task4 
-   mytodosRef.orderByChild("name").equalTo('task4').limitToFirst(1).on("child_added", function(snap) 
-	{
-		console.log(snap.val());
-	});
-
-//to get paritcular object from name by using start at and end at way	
-	mytodosRef.orderByChild("prior").startAt('low').endAt('low').on("child_added", function(snap) 
-	{
-		console.log(snap.val());
-	});
-//to get paticular reference for date which by end date 
-	mytodosRef.orderByChild('ddate').endAt('2016-12-08').on("child_added", function(snap) 
-	{
-		console.log(snap.val());
-	});	
-//to get paritcular last two objects by using key and first two object means use limittofirst key	
-	mytodosRef.orderByKey().limitToFirst(2).on("child_added", function(snap) 
-	{
-		console.log(snap.val());
-	});
-// to get ascending	order of value boolean
-	
-	mytodosRef.orderByValue().limitToLast(2).on("child_added", function(snap) 
-	{
-		console.log(snap.val());
-	});
-// to remove a child	
-	mytodosRef.orderByKey().on("child_removed", function(snap) 
-	{
-		console.log("child_removed",snap.val());
-		
-	});
-
 
     mytodosRef.on("value", function(snapshot) 
 	{
@@ -227,13 +193,20 @@ function searchLocal()
     
     return false;
 }  
-function Deletetodo(key)
+function Deletetodo()
 {
     console.log ("it is called");
-    var deletetodoRef=Deleteurl(key);
-   
-	deletetodoRef.remove();
-	show(data);
+	 
+	var del=mytodosRef.on('child_removed', function(snap) 
+	{
+		alert("delete");
+		
+		console.log(snap.val());
+		
+
+	});
+
+	//show();
 	
 		return false;
 }
@@ -249,12 +222,7 @@ function Edittodo(key){
 	    
     return false;
 }
-function Deleteurl(key)
-{
-	var newurl='https://todostable-70fca.firebaseio.com/mytodos/' + key;
-	console.log(newurl);
-	return   firebase.database().ref("mytodos/").child(key);
-}
+
 function show(data) {
 	
     var html = '<table class="table"><thead> <tr><th> NAME</th><th> DESCRIPTION</th><th> DATE</th><th> PRIORITY</th><th> STATUS </th></tr></thead><tbody >';		
@@ -269,28 +237,25 @@ function show(data) {
 	
 } 
 
-
 function searchFB()
 {
     
     namevalue = document.register.uname.value ;
-    const db = firebase.database();   
- //   const todos = db.child('todos');
-    const query = mytodosRef 
-                    .orderByChild('name')
-                    .equalTo(namevalue)
-                    .limitToFirst(1);
+    var db = firebase.database();   
+ 
+    var  query = mytodosRef.orderByChild('name').equalTo(namevalue).limitToFirst(1);
     
-    query.on('value', snap=>{
+    query.on('value', function(snap)
+	{
 
         console.log('values');
         alert('here');
         console.log(snap.val());
-        mynewobj = snap.val();
+        myserobj = snap.val();
         
-        show(mynewobj);
-        document.register.uname.value=mynewobj.name;
-	    document.register.desc.value=mynewobj.desc;
+        show(myserobj);
+        document.register.uname.value=myserobj.name;
+	    //document.register.desc.value=myserobj.desc;
 	
         
     });
@@ -299,5 +264,8 @@ function searchFB()
     
 }
 
+
+    
+    
 
 	
