@@ -186,26 +186,24 @@ function searchLocal()
 	
 
 	}
-    
-  
-  
-  
-    
+   
     return false;
 }  
-function Deletetodo()
-{
-    console.log ("it is called");
-	 
-	var del=mytodosRef.on('child_removed', function(snap) 
+mytodosRef.on("child_removed",function(snap)
 	{
-		alert("delete");
-		
+		alert("delete is worked");
 		console.log(snap.val());
 		
-
 	});
-
+function Deletetodo(key)
+{
+    alert(key);
+	var deletetodoRef=firebase.database().ref("mytodos/"+key);
+	console.log(deletetodoRef);
+  
+	  deletetodoRef.remove();
+	
+      console.log("it is called");
 	//show();
 	
 		return false;
@@ -222,6 +220,7 @@ function Edittodo(key){
 	    
     return false;
 }
+
 
 function show(data) {
 	
@@ -240,12 +239,15 @@ function show(data) {
 function searchFB()
 {
     
-    namevalue = document.register.uname.value ;
-    var db = firebase.database();   
+    namevalue = document.register.uname.value;
+	descvalue=document.register.desc.value;
+	
+   
  
-    var  query = mytodosRef.orderByChild('name').equalTo(namevalue).limitToFirst(1);
-    
-    query.on('value', function(snap)
+    var  namequery = mytodosRef.orderByChild('name').equalTo(namevalue).limitToFirst(1);
+  
+	
+    namequery.on('value', function(snap)
 	{
 
         console.log('values');
@@ -255,14 +257,41 @@ function searchFB()
         
         show(myserobj);
         document.register.uname.value=myserobj.name;
-	    //document.register.desc.value=myserobj.desc;
+	       
+    });
+	 var  descquery=mytodosRef.orderByChild('description').equalTo(descvalue).limitToFirst(1);
+    descquery.on('value', function(snap)
+	{
+
+        console.log('values');
+           console.log(snap.val());
+        myservobj = snap.val();
+        
+        show(myservobj);
+      
+	    document.register.desc.value=myservobj.desc;
 	
         
     });
-    
-    return false ;
+	return false ;
     
 }
+	 //var  datequery= mytodosRef.orderByChild('date').equalTo(datevalue).limitToFirst(1);
+ /*   datequery.on('value', function(snap)
+	{
+
+        console.log('values');
+        
+        console.log(snap.val());
+        myserobj = snap.val();
+        
+        show(myserobj);
+        document.register.date.value=myserobj.date;
+	    
+	
+	});*/
+    
+    
 
 
     
