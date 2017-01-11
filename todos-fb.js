@@ -1,15 +1,8 @@
 var config = {databaseURL: "https://todostable-70fca.firebaseio.com"};
-
 firebase.initializeApp(config);
 var mytodos=[];
 var data={};
 var mytodosRef = firebase.database().ref("mytodos");
-
- 
-//searchLocal();
-
-//searchFB();
-
 function addtodo()
 {
 	 var todo ={} ;
@@ -23,12 +16,9 @@ function addtodo()
 		 return false;
 	 
 }	 
-
     mytodosRef.on("value", function(snapshot) 
 	{
-		
-		
-          data = snapshot.val();
+		          data = snapshot.val();
          for (var key in data) 
 		 {
             {
@@ -38,12 +28,11 @@ function addtodo()
                        ddate=data[key].ddate ? data[key].ddate:'';
 					   sstat=data[key].sstat ? data[key].sstat:'';
             }
-			//console.log(data);
-	    }
+		 }
 		show(data);
  
 	});
-		
+	
 function update()
 {
 	var currentkey=document.register.currentkey.value;
@@ -60,133 +49,6 @@ function update()
 	     	console.log("my effort");
 		show(data);
     
-    return false;
-}  
-
-
-function getCriteria()
-{
-	debugger;
-	
-   var search={};
-   
-   console.log(search);
-
-  if (document.register.uname.value != "")
-		   {
-			search.key="name";
-            search.value= document.register.uname.value ;
-            return search;
-            
-        }
-    
-    if (document.register.date.value != "")
-                
-        {
-            search.key="date";
-            search.value= document.register.date.value ;
-            return search;
-            
-        }
-    if (document.register.pri.value != "")
-                
-        {
-            search.key="prior";
-            search.value= document.register.pri.value ;
-            return search;
-            
-        }
-		 if (document.register.st.value != "")
-                
-        {
-            search.key="sstat";
-            search.value= document.register.st.value ;
-            return search;
-            
-        }
-   
-   
-    
-}
-function searchLocal()  
-{
- alert("hello");
- 
-   
-   var search= getCriteria();
-    alert("gotocriteris");
-    searchflag =false;
-   
-
-
-  
-  
-  for(var key in data)
-	{
-		
-	       var todo =data[key];
-		   
-		   
-           
-			
-	
-         switch (search.key)
-        {
-                
-        case "name":
-           
-                if ( search.value.trim() == todo.name.trim())
-            {
-                alert("ok");
-                var searchResult=data[key]; 
-                console.log(searchResult);	
-                searchflag =true;
-            }
-		
-        break;
-                
-       case "date":
-	   
-           if (( todo.ddate !=null) && (search.value.trim() == todo.ddate.trim() ))
-             {
-            
-                  var searchdate=data[key];
-			     console.log(searchdate);
-			     //searchflag=true;
-              }
-				
-        break; 
-        case "prior":
-           if(search.value.trim() == todo.prior.trim() )
-             {
-                alert("pri");
-                  var searchResul=data[key];
-			     console.log(searchResul);
-			    // searchflag=true;
-              }
-			  break;
-		case "sstat":
-           if(search.value.trim() == todo.sstat.trim() )
-             {
-                alert("stat");
-                  var searchResul=data[key];
-			     console.log(searchResul);
-			    searchflag=true;
-              }
-			  break;
-				     	  
-				        
-    default:
-        console.log("error");
-                
-                
-        }
-    
-	if( searchflag )  break;
-	
-
-	}
-   
     return false;
 }  
 mytodosRef.on("child_removed",function(snap)
@@ -221,7 +83,6 @@ function Edittodo(key){
     return false;
 }
 
-
 function show(data) {
 	
     var html = '<table class="table"><thead> <tr><th> NAME</th><th> DESCRIPTION</th><th> DATE</th><th> PRIORITY</th><th> STATUS </th></tr></thead><tbody >';		
@@ -232,7 +93,6 @@ function show(data) {
     html += '</tr>	 </tbody> </table>';
 		
     document.getElementById('todos').innerHTML = html;
-		
 	
 } 
 
@@ -241,15 +101,13 @@ function searchFB()
     
     namevalue = document.register.uname.value;
 	descvalue=document.register.desc.value;
-	
-   
- 
-    var  namequery = mytodosRef.orderByChild('name').equalTo(namevalue).limitToFirst(1);
-  
-	
-    namequery.on('value', function(snap)
+	datevalue=document.register.date.value;
+	privalue=document.register.pri.value;
+	stvalue=document.register.st.value;
+	 var  namequery = mytodosRef.orderByChild('name').equalTo(namevalue).limitToFirst(1);
+      namequery.on('value', function(snap)
 	{
-
+        
         console.log('values');
         alert('here');
         console.log(snap.val());
@@ -259,38 +117,63 @@ function searchFB()
         document.register.uname.value=myserobj.name;
 	       
     });
-	 var  descquery=mytodosRef.orderByChild('description').equalTo(descvalue).limitToFirst(1);
+	
+	var  descquery=mytodosRef.orderByChild('desc').equalTo(descvalue).limitToFirst(1);
     descquery.on('value', function(snap)
 	{
 
         console.log('values');
-           console.log(snap.val());
+        console.log(snap.val());
         myservobj = snap.val();
-        
         show(myservobj);
       
 	    document.register.desc.value=myservobj.desc;
-	
-        
-    });
-	return false ;
-    
-}
-	 //var  datequery= mytodosRef.orderByChild('date').equalTo(datevalue).limitToFirst(1);
- /*   datequery.on('value', function(snap)
-	{
+	});
 
+    var  datequery= mytodosRef.orderByChild('ddate').equalTo(datevalue).limitToFirst(1);
+     datequery.on('value', function(snap)
+	{
+		
         console.log('values');
         
         console.log(snap.val());
         myserobj = snap.val();
         
         show(myserobj);
-        document.register.date.value=myserobj.date;
+        document.register.date.value=myserobj.ddate;
 	    
 	
-	});*/
-    
+	});
+	  var  priquery= mytodosRef.orderByChild('prior').equalTo(privalue).limitToFirst(1);
+     priquery.on('value', function(snap)
+	{
+		
+        console.log('values');
+        
+        console.log(snap.val());
+        myserobj = snap.val();
+        
+        show(myserobj);
+        document.register.pri.value=myserobj.prior;
+	    
+	
+	});
+	var  stquery= mytodosRef.orderByChild('sstat').equalTo(stvalue).limitToFirst(1);
+     stquery.on('value', function(snap)
+	{
+		
+        console.log('values');
+        
+        console.log(snap.val());
+        myserobj = snap.val();
+        
+        show(myserobj);
+        document.register.st.value=myserobj.sstat;
+	    
+	
+	});
+    	return false ;
+}
     
 
 
