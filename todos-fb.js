@@ -1,22 +1,46 @@
-var config = {databaseURL: "https://todostable-70fca.firebaseio.com"};
-firebase.initializeApp(config);
+
 var mytodos=[];
 var data={};
-var mytodosRef = firebase.database().ref("mytodos");
+// Initialize Firebase
+  var config = {
+    apiKey: "AIzaSyA0wmhbPB5BUgb0uVmXm5V9LF5xkPwQcTU",
+    authDomain: "todostable-70fca.firebaseapp.com",
+    databaseURL: "https://todostable-70fca.firebaseio.com",
+    storageBucket: "todostable-70fca.appspot.com",
+    messagingSenderId: "946094622637"
+  };
+  firebase.initializeApp(config);
+
+
+var myUserId = sessionStorage.getItem('currentUserId');
+
+console.log("session id : "+myUserId);
+
+//var firedb=JSON.parse(localStorage.getItem("firedb"));
+//var auth=JSON.parse(localStorage.getItem("auth"));
+
+ var UserTodosRef = firebase.database().ref('newtodos/' + myUserId)
+
 function addtodo()
 {
-	 var todo ={} ;
+    
+    console.log(myUserId);
+       
+    var newTodosRef = UserTodosRef.push();
+    
+    var todo ={} ;
 	 todo.name=document.register.uname.value;
 	 todo.prior=document.register.pri.value;
 	 todo.desc=document.register.desc.value;
 	 todo.ddate=document.register.date.value;
 	 todo.sstat=document.register.st.value;
-    	mytodosRef.push(todo);
-			 console.log(todo);
+	//mytodosRef.push(todo);
+     newTodosRef.set(todo);
+     console.log(todo);
 		 return false;
 	 
-}	 
-    mytodosRef.on("value", function(snapshot) 
+}	  
+    UserTodosRef.on("value", function(snapshot) 
 	{
 		          data = snapshot.val();
          for (var key in data) 
@@ -51,7 +75,7 @@ function update()
     
     return false;
 }  
-mytodosRef.on("child_removed",function(snap)
+UserTodosRef.on("child_removed",function(snap)
 	{
 		alert("delete is worked");
 		console.log(snap.val());
@@ -60,8 +84,11 @@ mytodosRef.on("child_removed",function(snap)
 function Deletetodo(key)
 {
     alert(key);
-	var deletetodoRef=firebase.database().ref("mytodos/"+key);
-	console.log(deletetodoRef);
+	//var deletetodoRef=firebase.database().ref('newtodos/' + myUserId+"/"+key);
+	var deletetodoRef=UserTodosRef.child(key);
+    
+    
+    console.log(deletetodoRef);
   
 	  deletetodoRef.remove();
 	
@@ -72,7 +99,7 @@ function Deletetodo(key)
 }
 function Edittodo(key){
     //setting form values to object
-	console.log("it is now edit");
+	 console.log("it is now edit");
 	 document.register.uname.value=data[key].name;
 	 document.register.desc.value=data[key].desc;
 	 document.register.pri.value=data[key].prior;
@@ -98,39 +125,42 @@ function show(data) {
 
 function searchFB()
 {
-    
     namevalue = document.register.uname.value;
 	descvalue=document.register.desc.value;
 	datevalue=document.register.date.value;
 	privalue=document.register.pri.value;
 	stvalue=document.register.st.value;
-	 var  namequery = mytodosRef.orderByChild('name').equalTo(namevalue).limitToFirst(1);
+    
+	 var  namequery = UserTodosRef.orderByChild('name').equalTo(namevalue).limitToFirst(1);
+    
+    console.log(namevalue);
+    
       namequery.on('value', function(snap)
 	{
         
-        console.log('values');
+        console.log('Name values');
         alert('here');
         console.log(snap.val());
         myserobj = snap.val();
         
-        show(myserobj);
-        document.register.uname.value=myserobj.name;
+        show(snap.val());
+    //    document.register.uname.value=myserobj.name;
 	       
     });
 	
-	var  descquery=mytodosRef.orderByChild('desc').equalTo(descvalue).limitToFirst(1);
+	var  descquery=UserTodosRef.orderByChild('desc').equalTo(descvalue).limitToFirst(1);
     descquery.on('value', function(snap)
 	{
 
         console.log('values');
         console.log(snap.val());
         myservobj = snap.val();
-        show(myservobj);
+     //   show(myservobj);
       
-	    document.register.desc.value=myservobj.desc;
+	//    document.register.desc.value=myservobj.desc;
 	});
 
-    var  datequery= mytodosRef.orderByChild('ddate').equalTo(datevalue).limitToFirst(1);
+    var  datequery= UserTodosRef.orderByChild('ddate').equalTo(datevalue).limitToFirst(1);
      datequery.on('value', function(snap)
 	{
 		
@@ -139,12 +169,12 @@ function searchFB()
         console.log(snap.val());
         myserobj = snap.val();
         
-        show(myserobj);
-        document.register.date.value=myserobj.ddate;
+     //   show(myserobj);
+    //    document.register.date.value=myserobj.ddate;
 	    
 	
 	});
-	  var  priquery= mytodosRef.orderByChild('prior').equalTo(privalue).limitToFirst(1);
+	  var  priquery= UserTodosRef.orderByChild('prior').equalTo(privalue).limitToFirst(1);
      priquery.on('value', function(snap)
 	{
 		
@@ -153,12 +183,13 @@ function searchFB()
         console.log(snap.val());
         myserobj = snap.val();
         
-        show(myserobj);
-        document.register.pri.value=myserobj.prior;
+     //   show(myserobj);
+   //     document.register.pri.value=myserobj.prior;
 	    
 	
 	});
-	var  stquery= mytodosRef.orderByChild('sstat').equalTo(stvalue).limitToFirst(1);
+	var  stquery= UserTodosRef.orderByChild('sstat').equalTo(stvalue).limitToFirst(1);
+    
      stquery.on('value', function(snap)
 	{
 		
@@ -167,8 +198,8 @@ function searchFB()
         console.log(snap.val());
         myserobj = snap.val();
         
-        show(myserobj);
-        document.register.st.value=myserobj.sstat;
+    //    show(myserobj);
+      //  document.register.st.value=myserobj.sstat;
 	    
 	
 	});

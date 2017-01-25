@@ -1,21 +1,47 @@
 var UserTodosRef;
+ var auth=firebase.auth();
+
 window.onload= function(){
- var btnsignin= document.getElementById('btnsignin');
+    
+  var btnsignin= document.getElementById('btnsignin');
+   var btnsignout =document.getElementById('btnsignout');
+    var btnsavetodo =document.getElementById('btnsavetodo');
+    
+    
+ btnsignout.addEventListener('click',function()
+ {
+     firebase.auth().signOut();
+ });
+    
+     btnsavetodo.addEventListener('click',function(){addtodo()}); 
+ //  
+    
+    
  btnsignin.addEventListener('click',function()
  {
  var email=document.getElementById('txtemail').value;
  var pass=document.getElementById('txtpass').value;
  console.log(email);
  console.log(pass);
- var auth=firebase.auth();
+
  var promise=auth.signInWithEmailAndPassword(email,pass);
  promise.catch(function(error){
   console.log(error.message);});
   
    console.log(auth.currentUser);
    
-    UserTodosRef = firebase.database().ref('newtodos/' + auth.currentUser.uid);
-   UserTodosRef.on("value", function(snapshot) 
+  
+ 
+  });
+  firebase.auth().onAuthStateChanged(function(firebaseuser)
+ {
+   
+	 console.log("on auth get changed");
+     if (firebaseuser) {
+		 console.log(firebaseuser);
+         
+         UserTodosRef = firebase.database().ref('newtodos/' + auth.currentUser.uid);
+       UserTodosRef.on("value", function(snapshot) 
 	{
 		          data = snapshot.val();
          for (var key in data) 
@@ -32,14 +58,6 @@ window.onload= function(){
 		show(data);
  
 	});
- 
-  });
-  firebase.auth().onAuthStateChanged(function(firebaseuser)
- {
-	 
-	 console.log("on auth get changed");
-     if (firebaseuser) {
-		 console.log(firebaseuser);
 		 
 	
   }
@@ -48,6 +66,7 @@ window.onload= function(){
   }
 });
   
+ 
 
 var mytodos=[];
 var data={};
@@ -55,6 +74,7 @@ var data={};
 
 function addtodo()
 {    debugger;
+ 
 	 var newTodosRef = UserTodosRef.push();
     
      var todo ={} ;
