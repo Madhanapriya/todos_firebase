@@ -1,0 +1,186 @@
+<html>
+<head>
+<title> popup window</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="https://www.gstatic.com/firebasejs/3.6.1/firebase.js"></script>
+ 
+<style>
+  .modal-header, h5, .close {
+      background-color: #5cb85c;
+      color:white !important;
+      text-align: center;
+      font-size: 30px;
+  }
+  .modal-footer {
+      background-color: #f9f9f9;
+  }
+  body
+{
+background-color:#779985}
+
+.panel{
+border:1px solid #A52A2A;
+}
+.panel-heading
+{
+  color:#fff !important;
+  background-color:#891e41 !important;
+   font-size:32px;
+   text-align:center;
+  border-bottom:1px solid transparent;
+  } 
+  </style>
+
+</head>
+<body>
+<!--login section -->
+ <nav class="navbar navbar-default navbar-fixed-top">
+ <div class="container">
+     <ul class="nav navbar-nav navbar-right">
+        <li><a href="#myhome" data-toggle="modal" data-target="#myhome">LOGIN</a></li>
+	 </ul>
+	</div>
+</nav>	
+<!-- modal section-->
+<div class="container">
+<div id="myhome" class="modal fade" role="dialog">
+<div class="modal-dialog">
+  <div class="modal-content">
+    <div class="modal-header" style="padding:10px;>
+     <h5 class="modal-title" id="myhometitle">LOGIN </h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+     </div>
+	 <div class="modal-body">
+        <div class="row">
+           <div class="col-md-4">
+                <div class="form-group">
+				<label for="email">Email address</label>
+                  <input id ="txtemail" type="text" placeholder="ENTER YOUR EMAIL" SIZE="20" value="test@gmail.com"> 
+             </div>
+            </div>
+        </div>
+       <div class="row">
+           <div class="col-md-4">
+              <div class="form-group">
+			  <label for="pwd">Password</label>
+                <input id ="txtpass" type="text" placeholder="ENTER YOUR PASSWORD" SIZE="20" value="pass1234"> 
+              </div>
+           </div>
+       </div>
+     </div>
+	 <div class="modal-footer">
+        <button type="button" id="btnsignin" class="btn btn-secondary" data-dismiss="modal" >SIGN IN</button>
+        
+      </div>
+  </div>
+</div>
+</div>
+
+</div>
+<div class="container">
+ <div class="panel panel-default">
+	<div class="panel-heading">
+	<h2  class="panel-title"> TODOS </h2>
+	</div>
+	
+	    <form class="form-horizontal" alt=""  name="register" >
+		
+		    <div class="panel-body">
+			    <div class="row">
+			        <div class="form-group">
+					  <label for="uname" class="control-label col-md-2"> NAME</label>
+					    <div class="col-md-4">
+						<input class="form-control" name="uname"  type="text" placeholder="ENTER YOUR NAME" SIZE="20"> 
+						</div>
+				    </div>
+			    </div>
+			    <div class="row">
+			        <div class="form-group">
+					  <label for="desc" class="control-label col-md-2"> DESCRIPTION</label>
+					    <div class="col-md-4">
+						<textarea  name="desc" placeholder="ENTER YOUR COMMENTS" rows="4" cols="50"> </textarea>
+						</div>
+				    </div>
+			    </div>
+				<div class="row">
+			        <div class="form-group">
+					  <label for="date" class="control-label col-md-2"> DATE</label>
+					    <div class="col-md-4">
+						<input class="form-control" type= "date" name="date">
+						</div>
+				    </div>
+			    </div> 
+				<div class="row">
+			        <div class="form-group">
+					  <label for="pri" class="control-label col-md-2"> PRIORITY</label>
+					    <div class="col-md-4">
+						  
+						    <select class="form-control" name="pri">
+							 <option value=""> </option>
+							 <option value="low"> LOW</option>
+							 <option value="medium"> MEDIUM</option>
+							 <option value="high"> HIGH</option>
+							</select>
+						</div>
+				    </div>
+			    </div> 
+				<div class="row">
+			        <div class="form-group">
+					  <label for="st" class="control-label col-md-2"> STATUS</label>
+					    <div class="col-md-4">
+						    <select class="form-control" name="st">
+							<option value=""> </option>					
+							<option value="pending"> PENDING</option>
+							 <option value="completed"> COMPLETED</option>
+							</select>
+						</div>
+				    </div>
+			    </div> 
+				
+				<div class="row">
+			        <div class="form-group">
+					     <input type="hidden" name="currentkey" value=-1>
+					    <div class="col-md-4">
+                         <button id="button1" style="float:right" onclick="return addtodo();" >SAVE</button>
+						</div>
+						 <div class="col-md-1">
+                         <button id="button2" style="float:left"  onclick="return update();">UPDATE</button>
+						</div>
+                        <div class="col-md-1">
+                         <button id="button2" style="float:left"  onclick="return searchFB();">SEARCH</button>
+						</div>
+				    </div>
+			    </div>  
+			    <hr/>
+			</div>
+        </form>
+		
+	</div>
+    
+    <div id="todos"></div>
+	</div>
+	
+        	
+	  
+<script>
+var config =   {
+    apiKey: "AIzaSyA0wmhbPB5BUgb0uVmXm5V9LF5xkPwQcTU",
+    authDomain: "todostable-70fca.firebaseapp.com",
+    databaseURL: "https://todostable-70fca.firebaseio.com",
+    storageBucket: "todostable-70fca.appspot.com",
+    messagingSenderId: "946094622637"
+  };
+  
+firebase.initializeApp(config);
+
+
+</script>
+<script type = "text/javascript" src="./signin.js"></script>
+</body>
+</html>
