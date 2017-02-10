@@ -1,0 +1,38 @@
+<!dDOCTYPE html>
+<html ng-app="Demoapp">
+<head>
+    
+    <title>Angular example</title>
+    <meta charset="utf-8">
+     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js"></script>
+    <script type="text/javascript" src="demoapp.js"></script>
+        </head>
+    <body ng-controller="democontroller" >
+        <div  >
+            <p>Enter your name: <input type="text" placeholder="enter your name" ng-model="Name"></p>
+                                      
+            <h3> Hello  {{Name}}  !   </h3>
+            <input type="text" ng-model="search">
+            <ul>
+                <li ng-repeat="cust in customers|filter:search">
+                    {{cust.name }}-{{cust.age}}-{{cust.City}}
+                </li>
+            
+            </ul>
+        
+        
+        
+        
+        
+        
+        </div>
+    
+    
+    
+    
+    </body>
+
+
+
+
+</html>
