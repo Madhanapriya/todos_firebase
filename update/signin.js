@@ -3,18 +3,23 @@ var UserTodosRef;
 
 window.onload= function(){
     
-  var btnsignin= document.getElementById('btnsignin');
+   var btnsignin= document.getElementById('btnsignin');
    var btnsignout =document.getElementById('btnsignout');
-    var btnsavetodo =document.getElementById('btnsavetodo');
-    
-    
+   var btnsavetodo =document.getElementById('btnsavetodo');
+   var btnupdatetodo=document.getElementById('btnupdatetodo');
+   var btnsearchtodo=document.getElementById('btnsearchtodo');
  btnsignout.addEventListener('click',function()
  {
      firebase.auth().signOut();
  });
     
      btnsavetodo.addEventListener('click',function(){addtodo()}); 
- //  
+	 btnupdatetodo.addEventListener('click',function(){update()}); 
+	 btnsearchtodo.addEventListener('click',function(){searchFB()}); 
+  
+  
+  
+  
     
     
  btnsignin.addEventListener('click',function()
@@ -73,7 +78,7 @@ var data={};
 
 
 function addtodo()
-{    debugger;
+{    
  
 	 var newTodosRef = UserTodosRef.push();
     
@@ -128,7 +133,8 @@ function Deletetodo(key)
 		return false;
 }
 function Edittodo(key){
-    //setting form values to object
+	debugger;
+	    //setting form values to object
 	console.log("it is now edit");
 	 document.register.uname.value=data[key].name;
 	 document.register.desc.value=data[key].desc;
@@ -155,7 +161,7 @@ function show(data) {
 	'  <button  onclick="return Edittodo(\''+key+'\')" >Edit  </button> <button  onclick="return Deletetodo(\''+key+'\')" >Delete</button></td>';
     }
     html += '</tr>	 </tbody> </table>';
-		
+	console.log(html);	
     document.getElementById('todos').innerHTML = html;
 	
 } 
